@@ -10,8 +10,7 @@ const Navigation = require('./Navigation');
 const DownloadBtn = require('./DownloadBtn');
 const RiskSelector = require('./RiskSelector');
 
-const navItems = [{label: 'Chad', href: "http://thinkhazard.org/report/50-chad/DG"}, {label: "Biltine", href: "http://thinkhazard.org/report/870-chad-biltine/DG"}, {label: "Gouruf", active: true}];
-
+const {navItems, riskItems} = require('../mockupData.json');
 
 const TopBar = React.createClass({
     propTypes: {
@@ -36,7 +35,7 @@ const TopBar = React.createClass({
                     <h2>
                     {title}
                     </h2>
-                    <RiskSelector/>
+                    <RiskSelector riskItems={riskItems}/>
                 </div>
             </div>);
     }

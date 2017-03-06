@@ -49,15 +49,15 @@ body {
   border-top: 10px solid;
   -moz-transform: scale(0.999);
 }
-.hazard-types-list li.overview.active {
+.hazard-types-list li.active {
   background-color: #58595b;
   border-bottom-color: #58595b;
 }
-.hazard-types-list li.overview.active .hazard-icon {
+.hazard-types-list li.active .hazard-icon {
   color: #58595b;
   border-color: #58595b;
 }
-.hazard-types-list li.overview.active .arrow {
+.hazard-types-list li.active .arrow {
   border-top-color: #58595b;
 }
 .hazard-level {

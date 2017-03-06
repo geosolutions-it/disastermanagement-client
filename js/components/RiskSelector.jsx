@@ -14,7 +14,7 @@ const RiskSelector = React.createClass({
           label: React.PropTypes.string.isRequired,
           herf: React.PropTypes.string,
           active: React.PropTypes.bool,
-          icon: React.PropTypes.string
+          iconClass: React.PropTypes.string
         })),
         goTo: React.PropTypes.func
     },
@@ -23,54 +23,24 @@ const RiskSelector = React.createClass({
             goTo: () => {}
         };
     },
+    getItems() {
+        const {riskItems} = this.props;
+        return riskItems.map((item, idx) => {
+            const {active, label, iconClass, href} = item;
+            return (
+            <li key={idx} className={`${href ? '' : 'no-data'} text-center ${active ? 'active' : ''}`}>
+                <a href={href}>
+                    <i className={`fa hazard-icon ${iconClass}`}></i><br/>
+                    {label}
+                    {active ? (<div className="arrow"></div>) : null}
+                </a>
+            </li>);
+        });
+    },
     render() {
         return (
             <ul className="hazard-types-list horizontal list-unstyled" role="tablist">
-                <li className="overview text-center ">
-                    <a href="http://thinkhazard.org/report/65657-chad-barl-el-gazal-salal">
-                        <i className="fa hazard-icon icon-overview"></i><br/>Overview
-                    </a>
-                </li>
-                <li className="text-center ">
-                    <a href="http://thinkhazard.org/report/65657-chad-barl-el-gazal-salal/FL">
-                        <i className="fa hazard-icon icon-fl"></i><br/>River flood
-                    </a>
-                </li>
-                <li className="VLO text-center active">
-                    <a href="http://thinkhazard.org/report/65657-chad-barl-el-gazal-salal/EQ">
-                        <i className="fa hazard-icon icon-eq"></i><br/>Earthquake
-                        <div className="arrow"></div>
-                    </a>
-                </li>
-                <li className="MED text-center ">
-
-                        <i className="fa hazard-icon icon-dg"></i><br/>Water scarcity
-                </li>
-                <li className="no-data text-center ">
-                    <a>
-                        <i className="fa hazard-icon icon-cy"></i><br/>Cyclone
-                    </a>
-                </li>
-                <li className="no-data text-center ">
-                    <a>
-                        <i className="fa hazard-icon icon-cf"></i><br/>Coastal flood
-                    </a>
-                </li>
-                <li className="no-data text-center ">
-                    <a>
-                        <i className="fa hazard-icon icon-ts"></i><br/>Tsunami
-                    </a>
-                </li>
-                <li className="VLO text-center ">
-                    <a href="http://thinkhazard.org/report/65657-chad-barl-el-gazal-salal/VA">
-                        <i className="fa hazard-icon icon-va"></i><br/>Volcano
-                    </a>
-                </li>
-                <li className="no-data text-center ">
-                    <a>
-                        <i className="fa hazard-icon icon-ls"></i><br/>Landslide
-                    </a>
-                </li>
+            {this.getItems()}
             </ul> );
     }
 });
