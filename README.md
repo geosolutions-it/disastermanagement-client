@@ -1,4 +1,4 @@
-Geonode risk hazard plugin
+Geonode disaster management client
 ==========
 
 Quick Start
