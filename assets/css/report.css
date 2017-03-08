@@ -450,14 +450,56 @@ footer:after {
     transform: rotate(359deg);
   }
 }
-li.analysis .arrow {
-  position: absolute;
-  width: 100%;
-  height: 0;
-  border-left: 51px solid transparent;
-  border-right: 51px solid transparent;
-  border-top: 10px solid;
-  -moz-transform: scale(0.999);
-}
 .analysis-header {
+    display: inline-block;
+    width: 100%;
+    border-bottom: 1px solid #58595b;
+}
+.analysis-header .page-header {
+    float:left;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+}
+.analysis-header .nav-tabs > li {
+    cursor: pointer;
+}
+.analysis-tab > li  {
+    width: 110px;
+    height: 40px;
+    border: 1px solid;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 0px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+.analysis-tab > li.active {
+    background-color: #58595b;
+    cursor: auto;
+}
+.analysis-tab > li.active > span {
+    color: white;
+}
+.analysis-tab > li > span {
+   display: inline-block;
+   position: relative;
+   top: 7px;
+   font-size: 16px;
+
+}
+
+
+.analysis-tab {
+    margin-bottom:0px;
+}
+.analysis-tab li .arrow {
+    position: relative;
+    color: #58595b;
+    bottom: -15px;
+    width: 0;
+    height: 0;
+    border-left: 51px solid transparent;
+    border-right: 51px solid transparent;
+    border-top: 10px solid;
+    -moz-transform: scale(0.999);
 }
