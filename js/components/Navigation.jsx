@@ -12,21 +12,24 @@ const Navigation = React.createClass({
         items: React.PropTypes.arrayOf(
         React.PropTypes.shape({
             label: React.PropTypes.string.isRequired,
-            href: React.PropTypes.string,
-            active: React.PropTypes.bool
+            href: React.PropTypes.string
         })),
-        goTo: React.PropTypes.func
+        getData: React.PropTypes.func
     },
     getDefaultProps() {
         return {
             items: [],
-            goTo: ()=> {}
+            getData: ()=> {}
         };
     },
     renderItem() {
-        const {items, goTo} = this.props;
-        return items.map((el, idx) => (
-            <button key={idx} className={`btn btn-default ${el.active ? 'disabled' : ''}`} onClick={() => goTo(el.href)}>{el.label}</button>));
+        const {items, getData} = this.props;
+        const length = items.length;
+        return items.map((el, idx) => {
+            const classes = `btn btn-default ${length - 1 === idx ? 'disabled' : ''}`;
+            return (
+            <button key={idx} className={classes} onClick={() => getData(el.href)}>{el.label}</button>);
+        });
     },
     render() {
         return (

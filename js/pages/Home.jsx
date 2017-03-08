@@ -9,13 +9,17 @@ const React = require('react');
 const {connect} = require('react-redux');
 
 const Localized = require('../../MapStore2/web/client/components/I18N/Localized');
-const TopBar = require('../components/TopBar');
+const {getData} = require('../actions/disaster');
+const {topBarSelector} = require('../selectors/disaster');
+const TopBar = connect(topBarSelector)(require('../components/TopBar'));
+const DataContainer = require('../containers/DataContainer');
 
 const Home = React.createClass({
     propTypes: {
         params: React.PropTypes.object,
         locale: React.PropTypes.string,
-        messages: React.PropTypes.object
+        messages: React.PropTypes.object,
+        getData: React.PropTypes.func
     },
     componentWillMount() {
         console.log(this.props.params.splat);
@@ -27,9 +31,15 @@ const Home = React.createClass({
         const {messages, locale} = this.props;
         return (
             <Localized messages={messages} locale={locale}>
-               <TopBar/>
+               <div>
+                    <TopBar getData={this.loadData}/>
+                    <DataContainer getData={this.loadData}/>
+                </div>
             </Localized>
         );
+    },
+    loadData(href) {
+        this.props.getData(`http://disasterrisk-af.geo-solutions.it${href}`);
     }
 });
 
@@ -39,4 +49,4 @@ module.exports = connect((state) => {
         locale: state.locale && state.locale.current,
         messages: state.locale && state.locale.messages || {}
     };
-})(Home);
+}, {getData})(Home);
