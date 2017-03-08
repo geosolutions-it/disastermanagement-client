@@ -11,29 +11,36 @@ const React = require('react');
 const RiskSelector = React.createClass({
     propTypes: {
         riskItems: React.PropTypes.arrayOf(React.PropTypes.shape({
-          label: React.PropTypes.string.isRequired,
+          title: React.PropTypes.string.isRequired,
+          mnemonic: React.PropTypes.string.isRequired,
           herf: React.PropTypes.string,
-          active: React.PropTypes.bool,
-          iconClass: React.PropTypes.string
+          riskAnalysis: React.PropTypes.number
         })),
-        goTo: React.PropTypes.func
+        overviewHref: React.PropTypes.string,
+        activeRisk: React.PropTypes.string,
+        getData: React.PropTypes.func
     },
     getDefaultProps() {
         return {
-            goTo: () => {}
+            getData: () => {}
         };
     },
     getItems() {
-        const {riskItems} = this.props;
-        return riskItems.map((item, idx) => {
-            const {active, label, iconClass, href} = item;
+        const {riskItems, activeRisk, getData, overviewHref} = this.props;
+        const items = [{
+                    "mnemonic": "Overview",
+                    "title": "Overview",
+                    "riskAnalysis": 1,
+                    "href": overviewHref
+            }, ...riskItems];
+        return items.map((item, idx) => {
+            const {title, href, riskAnalysis, mnemonic} = item;
+            const active = activeRisk === mnemonic;
             return (
-            <li key={idx} className={`${href ? '' : 'no-data'} text-center ${active ? 'active' : ''}`}>
-                <a href={href}>
-                    <i className={`fa hazard-icon ${iconClass}`}></i><br/>
-                    {label}
+            <li key={idx} className={`${riskAnalysis > 0 ? '' : 'no-data'} text-center  ${active ? 'active' : ''}`} onClick={active ? () => {} : () => getData(href)}>
+                    <i className={`fa hazard-icon icon-${mnemonic.toLowerCase()}`}></i><br/>
+                    {title}
                     {active ? (<div className="arrow"></div>) : null}
-                </a>
             </li>);
         });
     },

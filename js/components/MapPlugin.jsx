@@ -14,7 +14,6 @@ const assign = require('object-assign');
 
 const {changeMapView} = require('../../MapStore2/web/client/actions/map');
 
-
 const mapType = "openlayers";
 const WMap = require('../../MapStore2/web/client/components/map/' + mapType + '/Map');
 const Layer = require('../../MapStore2/web/client/components/map/' + mapType + '/Layer');
