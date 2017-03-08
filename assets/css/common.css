@@ -2654,6 +2654,10 @@ input[type="button"].btn-block {
   bottom: 100%;
   margin-bottom: 2px;
 }
+.navbar-right {
+  float: right !important;
+  margin-right: -15px;
+}
 @media (min-width: 768px) {
   .navbar-right .dropdown-menu {
     left: auto;
@@ -2901,6 +2905,25 @@ input[type="button"].btn-block {
 .nav-tabs > li.active > a:focus {
   color: #555555;
   background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-bottom-color: transparent;
+  cursor: default;
+}
+
+.nav-tabs > li.analysis > a,
+.nav-tabs > li.analysis > a:hover,
+.nav-tabs > li.analysis > a:focus
+ {
+  color: #555555;
+  background-color: #f2f2f2;
+  border: 1px solid #dddddd;
+  border-bottom-color: transparent;
+  cursor: pointer;
+}
+.nav-tabs > li.active.analysis > a
+ {
+  color: #555555;
+  background-color: #f2f2f2;
   border: 1px solid #dddddd;
   border-bottom-color: transparent;
   cursor: default;

@@ -9,6 +9,11 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const {connect} = require('react-redux');
 
+const appReducers = {
+     disaster: require('./reducers/disaster')
+ };
+const {getData} = require('./actions/disaster');
+
 const StandardApp = require('../MapStore2/web/client/components/app/StandardApp');
 
 const {pages, pluginsDef, initialState, storeOpts} = require('./appConfig');
@@ -18,13 +23,13 @@ const StandardRouter = connect((state) => ({
     pages
 }))(require('../MapStore2/web/client/components/app/StandardRouter'));
 
-const appStore = require('../MapStore2/web/client/stores/StandardStore').bind(null, initialState, {});
+const appStore = require('../MapStore2/web/client/stores/StandardStore').bind(null, initialState, appReducers);
 
 const appConfig = {
     storeOpts,
     appStore,
     pluginsDef,
-    initialActions: [],
+    initialActions: [ () => getData("/risks/risk_data_extraction/loc/AF/")],
     appComponent: StandardRouter
 };
 

@@ -58,6 +58,10 @@ module.exports = {
             },
             '/mapstore/proxy': {
                 target: "http://dev.mapstore2.geo-solutions.it"
+            },
+            "/risks": {
+                target: "http://disasterrisk-af.geo-solutions.it",
+                changeOrigin: true
             }
         }
     },
