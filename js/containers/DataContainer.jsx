@@ -7,7 +7,7 @@
  */
 const React = require('react');
 const {connect} = require('react-redux');
-
+const {dataContainerSelector} = require('../selectors/disaster');
 const Overview = connect(({disaster = {}}) => ({riskItems: disaster.overview || [] }) )(require('../components/Overview'));
 
 const DataContainer = React.createClass({
@@ -15,6 +15,8 @@ const DataContainer = React.createClass({
         getData: React.PropTypes.func,
         showHazard: React.PropTypes.bool,
         className: React.PropTypes.string,
+        hazardTitle: React.PropTypes.string,
+        analysisType: React.PropTypes.object,
         hazardType: React.PropTypes.shape({
             mnemonic: React.PropTypes.string,
             description: React.PropTypes.string,
@@ -32,30 +34,59 @@ const DataContainer = React.createClass({
             className: "col-sm-7"
         };
     },
+    renderRiskAnalysis() {
+        const {analysisType = {}} = this.props;
+        return analysisType.riskAnalysis.map((rs, idx) => {
+            return (
+                <li key={idx} style={{marginBottom: 20}}>
+                    {rs.name}
+                    <ul><li>
+                    <h4>{rs.hazardSet.title}</h4>
+                    {rs.hazardSet.abstract}
+                    </li>
+                    </ul>
+                </li>
+                );
+        });
+    },
+    renderAnalysisTab() {
+        const {hazardType = {}, analysisType = {}, getData} = this.props;
+        return (hazardType.analysisTypes || []).map((type) => {
+            const {href, name, title} = type;
+            const active = name === analysisType.name;
+            return (<li key={name} className={`text-center ${active ? 'active' : ''}`} onClick={active ? () => {} : () => getData(href)}>
+                <span>{title}</span>
+                    {active ? (<div className="arrow"/>) : null}
+                    </li>);
+        });
+    },
     renderHazard() {
+        const {hazardType = {}, analysisType = {}, hazardTitle} = this.props;
         return (<div className={this.props.className}>
                 <div className="analysis-header">
-                <ul className="nav nav-tabs navbar-right">
-                    <li role="presentation" className="active"><a>Loss Impact</a>
-                    <div className="arrow"></div>
-                    </li>
-                    <li role="presentation" className=""><a>Impact</a></li>
+                <h2 className="page-header">{hazardTitle}</h2>
+                <ul className="analysis-tab horizontal list-unstyled pull-right">
+                {this.renderAnalysisTab()}
                 </ul>
-                <h2 className="page-header">
-                    Titolo
-                </h2>
+
+                </div>
+                <div>
+                    <h3>{analysisType.title}</h3>
+                    <ul>
+                    {this.renderRiskAnalysis()}
+                    </ul>
                 </div>
             </div>);
     },
     render() {
-        const {showHazard} = this.props;
+        const {showHazard, getData} = this.props;
         return (
             <div className="container">
                 <div className="row">
-                    {showHazard ? this.renderHazard() : (<Overview className={this.props.className} getData={this.loadData}/>)}
+                    {showHazard ? this.renderHazard() : (<Overview className={this.props.className} getData={getData}/>)}
                 </div>
             </div>);
     }
 });
 
-module.exports = connect(({disaster = {}}) => ({showHazard: disaster.hazardType && disaster.hazardType.mnemonic ? true : false}) )(DataContainer);
+module.exports = connect(dataContainerSelector)(DataContainer);
