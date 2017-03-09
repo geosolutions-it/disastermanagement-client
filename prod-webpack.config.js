@@ -7,7 +7,6 @@ var NormalModuleReplacementPlugin = require("webpack/lib/NormalModuleReplacement
 
 var assign = require('object-assign');
 
-assign(webpackConfig.entry, require('./examples.js'));
 
 webpackConfig.plugins = [
     new LoaderOptionsPlugin({

@@ -14,6 +14,9 @@ const appReducers = {
  };
 const {getData} = require('./actions/disaster');
 
+const ConfigUtils = require('../MapStore2/web/client/utils/ConfigUtils');
+ConfigUtils.setLocalConfigurationFile('/static/js/localConfig.json');
+
 const StandardApp = require('../MapStore2/web/client/components/app/StandardApp');
 
 const {pages, pluginsDef, initialState, storeOpts} = require('./appConfig');
