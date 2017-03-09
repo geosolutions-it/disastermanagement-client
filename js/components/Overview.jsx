@@ -28,8 +28,9 @@ const Overview = React.createClass({
         const {riskItems, getData} = this.props;
         return riskItems.map((item, idx) => {
             const {title, href, riskAnalysis} = item;
+            const noData = !(riskAnalysis > 0);
             return (
-            <div key={idx} className={`${riskAnalysis > 0 ? '' : 'level-no-data'} overview`} onClick={() => getData(href)}>
+            <div key={idx} className={`${noData ? 'level-no-data' : ''} overview`} onClick={noData ? undefined : () => getData(href)}>
                 <h2 className="page-header">
                     {title}
                     <small>

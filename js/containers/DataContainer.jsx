@@ -39,12 +39,8 @@ const DataContainer = React.createClass({
         return analysisType.riskAnalysis.map((rs, idx) => {
             return (
                 <li key={idx} style={{marginBottom: 20}}>
-                    {rs.name}
-                    <ul><li>
                     <h4>{rs.hazardSet.title}</h4>
                     {rs.hazardSet.abstract}
-                    </li>
-                    </ul>
                 </li>
                 );
         });
@@ -61,7 +57,7 @@ const DataContainer = React.createClass({
         });
     },
     renderHazard() {
-        const {hazardType = {}, analysisType = {}, hazardTitle} = this.props;
+        const {analysisType = {}, hazardTitle} = this.props;
         return (<div className={this.props.className}>
                 <div className="analysis-header">
                 <h2 className="page-header">{hazardTitle}</h2>
