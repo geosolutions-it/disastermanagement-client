@@ -59,7 +59,15 @@ module.exports = {
             '/mapstore/proxy': {
                 target: "http://dev.mapstore2.geo-solutions.it"
             },
-            "/risks": {
+            '/static/assets/': {
+                target: "http://localhost:8081/",
+                pathRewrite: { "^/static/assets": "/MapStore2/web/client"}
+            },
+            '/static/js/': {
+                target: "http://localhost:8081/",
+                pathRewrite: { "^/static/js": ""}
+            },
+            '/risks': {
                 target: "http://disasterrisk-af.geo-solutions.it",
                 changeOrigin: true
             }

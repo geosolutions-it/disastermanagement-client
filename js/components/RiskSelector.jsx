@@ -36,8 +36,9 @@ const RiskSelector = React.createClass({
         return items.map((item, idx) => {
             const {title, href, riskAnalysis, mnemonic} = item;
             const active = activeRisk === mnemonic;
+            const noData = !(riskAnalysis > 0);
             return (
-            <li key={idx} className={`${riskAnalysis > 0 ? '' : 'no-data'} text-center  ${active ? 'active' : ''}`} onClick={active ? () => {} : () => getData(href)}>
+            <li key={idx} className={`${noData ? 'no-data' : ''} text-center  ${active ? 'active' : ''}`} onClick={active || noData ? undefined : () => getData(href)}>
                     <i className={`fa hazard-icon icon-${mnemonic.toLowerCase()}`}></i><br/>
                     {title}
                     {active ? (<div className="arrow"></div>) : null}

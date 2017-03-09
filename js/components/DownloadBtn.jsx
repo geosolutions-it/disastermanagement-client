@@ -16,7 +16,6 @@ const DownloadBtn = React.createClass({
     },
     getDefaultProps() {
         return {
-            downloadAction: () => {},
             downloading: false,
             label: "Download Pdf"
         };
@@ -24,7 +23,7 @@ const DownloadBtn = React.createClass({
     render() {
         const {label, downloading, downloadAction} = this.props;
         return (
-            <button className="btn btn-default btn-xs" onClick={downloadAction}>
+            <button disabled={!downloadAction} className="btn btn-default btn-xs" onClick={downloadAction}>
                   {downloading ? (<i className="icon-spinner fa-spin"/>) : (<i className="icon-download-arrow"/>)}
                   {label}
             </button>);

@@ -31,7 +31,7 @@ const Home = React.createClass({
         const {messages, locale} = this.props;
         return (
             <Localized messages={messages} locale={locale}>
-               <div>
+               <div className="disaster-risk-client">
                     <TopBar getData={this.loadData}/>
                     <DataContainer getData={this.loadData}/>
                 </div>
@@ -39,7 +39,7 @@ const Home = React.createClass({
         );
     },
     loadData(href) {
-        this.props.getData(`http://disasterrisk-af.geo-solutions.it${href}`);
+        this.props.getData(href);
     }
 });
 
