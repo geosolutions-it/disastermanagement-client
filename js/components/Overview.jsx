@@ -34,7 +34,7 @@ const Overview = React.createClass({
                 <h2 className="page-header">
                     {title}
                     <small>
-                        <span className="level">{riskAnalysis}</span>
+                        <span className="level">{riskAnalysis ? riskAnalysis : 'no data available'}</span>
                     </small>
                    </h2>
             </div>);
@@ -42,7 +42,7 @@ const Overview = React.createClass({
     },
     render() {
         return (
-            <div className={this.props.className}>
+            <div style={{minHeight: 500}} className={this.props.className}>
                 <aside className="hazard-level">Analysis</aside>
                 {this.getItems()}
             </div>);

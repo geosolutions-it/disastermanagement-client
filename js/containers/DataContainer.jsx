@@ -62,7 +62,7 @@ const DataContainer = React.createClass({
         return (<div><h4>{hazardSet.title}</h4><br/>
                     {hazardSet.purpose}
                     <br/>
-                    <h4 style={{color: 'blue', cursor: 'pointer'}} onClick={tDim}>{data.dimensions[secDim].name}</h4>
+                    <h4 style={{color: 'blue', cursor: 'pointer'}} onClick={tDim}>{`Switch to ${data.dimensions[secDim].name}`}</h4>
                     <ul>
                     {data.dimensions[dim].values.map((val) => {
                         const chartData = this.getChartData(data.values, val);
@@ -97,7 +97,7 @@ const DataContainer = React.createClass({
             return (
                 <li key={idx} style={{marginBottom: 20}}>
                     <h4 style={{cursor: 'pointer'}}onClick={()=> getAnalysis(rs.href)}>{title}</h4>
-                    <i className={faIcon}></i>
+                    {<i clasName={faIcon}></i>}
                     <br/>
                     {abstract}
                 </li>
