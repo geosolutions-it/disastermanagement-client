@@ -13,10 +13,10 @@ const MapViewer = connect(() => ({}), {
     loadMapConfig: loadMapConfig.bind(null, "config.json", false)
 })(require('../../MapStore2/web/client/containers/MapViewer'));
 
-const Main = (props) => (
-        <div style={{height: 400, display: 'block'}}>
-        <MapViewer plugins={props.plugins} params={{mapType: "leaflet"}}/>
+const MapContainer = (props) => (
+        <div className="col-sm-5" style={{ height: 400, display: 'block'}}>
+            <MapViewer plugins={props.plugins} params={{mapType: "leaflet"}}/>
         </div>
 );
 
-module.exports = Main;
+module.exports = MapContainer;

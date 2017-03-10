@@ -18,13 +18,19 @@ const {
     DATA_LOADING,
     DATA_LOADED,
     DATA_ERROR,
+    TOGGLE_DIM,
     dataError,
     dataLoaded,
     dataLoading,
-    getData
+    getData,
+    toggleDim
 } = require('../disaster');
 
 describe('Test correctness of the disaster actions', () => {
+    it('toggle dimension', () => {
+        const action = toggleDim();
+        expect(action.type).toBe(TOGGLE_DIM);
+    });
     it('data loading', () => {
         const action = dataLoading();
         expect(action.type).toBe(DATA_LOADING);
