@@ -10,7 +10,14 @@ const axios = require('../../MapStore2/web/client/libs/ajax');
 const DATA_LOADING = 'DATA_LOADING';
 const DATA_LOADED = 'DATA_LOADED';
 const DATA_ERROR = 'DATA_ERROR';
+const ANALYSIS_DATA_LOADED = 'ANALYSIS_DATA_LOADED';
+const TOGGLE_DIM = 'TOGGLE_DIM';
 
+function toggleDim() {
+    return {
+        type: TOGGLE_DIM
+    };
+}
 function dataLoading() {
     return {
         type: DATA_LOADING
@@ -19,6 +26,12 @@ function dataLoading() {
 function dataLoaded(data) {
     return {
         type: DATA_LOADED,
+        data
+    };
+}
+function analysisDataLoaded(data) {
+    return {
+        type: ANALYSIS_DATA_LOADED,
         data
     };
 }
@@ -46,13 +59,35 @@ function getData(url) {
         });
     };
 }
+function getAnalysisData(url) {
+    return (dispatch) => {
+        dispatch(dataLoading());
+        return axios.get(url).then((response) => {
+            let state = response.data;
+            if (typeof state !== "object") {
+                try {
+                    state = JSON.parse(state);
+                } catch(e) {
+                    dispatch(dataError(e.message));
+                }
+            }
+            dispatch(analysisDataLoaded(state));
+        }).catch((e) => {
+            dispatch(dataError(e));
+        });
+    };
 
+}
 module.exports = {
     DATA_LOADING,
     DATA_LOADED,
     DATA_ERROR,
+    ANALYSIS_DATA_LOADED,
+    TOGGLE_DIM,
     dataError,
     dataLoaded,
     dataLoading,
-    getData
+    getData,
+    getAnalysisData,
+    toggleDim
 };

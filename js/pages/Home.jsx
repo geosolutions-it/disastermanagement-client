@@ -13,13 +13,15 @@ const {getData} = require('../actions/disaster');
 const {topBarSelector} = require('../selectors/disaster');
 const TopBar = connect(topBarSelector)(require('../components/TopBar'));
 const DataContainer = require('../containers/DataContainer');
+// const MapContainer = require('../containers/MapContainer');
 
 const Home = React.createClass({
     propTypes: {
         params: React.PropTypes.object,
         locale: React.PropTypes.string,
         messages: React.PropTypes.object,
-        getData: React.PropTypes.func
+        getData: React.PropTypes.func,
+        plugins: React.PropTypes.object
     },
     componentWillMount() {
         console.log(this.props.params.splat);
@@ -31,9 +33,14 @@ const Home = React.createClass({
         const {messages, locale} = this.props;
         return (
             <Localized messages={messages} locale={locale}>
-               <div className="disaster-risk-client">
+               <div>
                     <TopBar getData={this.loadData}/>
-                    <DataContainer getData={this.loadData}/>
+                    <div className="container">
+                        <div className="row">
+                            <DataContainer getData={this.loadData}/>
+                            {/*<MapContainer plugins={plugins}/>*/}
+                        </div>
+                    </div>
                 </div>
             </Localized>
         );

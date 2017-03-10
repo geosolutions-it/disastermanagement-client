@@ -11,17 +11,25 @@ const disaster = require('../disaster');
 const {
     DATA_LOADING,
     DATA_LOADED,
-    DATA_ERROR
+    DATA_ERROR,
+    TOGGLE_DIM
 } = require('../../actions/disaster');
 
 require('babel-polyfill');
 
 describe('Test the disaster reducer', () => {
-    const appState = {loading: false, error: null, data: null};
+    const appState = {dim: 0, loading: false, error: null, data: null};
 
     it('returns original state on unrecognized action', () => {
         const state = disaster(appState, {type: 'UNKNOWN'});
         expect(state).toEqual(appState);
+    });
+    it('test toggledim action', () => {
+        const testAction = {
+            type: TOGGLE_DIM
+        };
+        const state = disaster( appState, testAction);
+        expect(state.dim).toBe(1);
     });
     it('test loading action', () => {
         const testAction = {
