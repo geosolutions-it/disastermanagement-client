@@ -33,7 +33,7 @@ const Home = React.createClass({
         const {messages, locale} = this.props;
         return (
             <Localized messages={messages} locale={locale}>
-               <div>
+               <div className="disaster">
                     <TopBar getData={this.loadData}/>
                     <div className="container">
                         <div className="row">
