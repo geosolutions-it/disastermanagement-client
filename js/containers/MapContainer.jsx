@@ -10,7 +10,7 @@ const React = require('react');
 const {connect} = require('react-redux');
 const {loadMapConfig} = require('../actions/disaster');
 const MapViewer = connect(() => ({}), {
-    loadMapConfig: loadMapConfig.bind(null, "static/js/config.json", false, "/risks/geom/loc/AF/")
+    loadMapConfig: loadMapConfig.bind(null, "/static/js/config.json", false, "/risks/geom/loc/AF/")
 })(require('../../MapStore2/web/client/containers/MapViewer'));
 
 const {drillUpSelector} = require('../selectors/disaster');
