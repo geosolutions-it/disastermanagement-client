@@ -24,7 +24,15 @@ const dataContainerSelector = createSelector([riskItemsSel, hazardTypeSel, analy
         riskAnalysisData,
         dim
     }));
+const drillUpSelector = createSelector([navItemsSel],
+     (navItems) => ({
+        disabled: navItems.length < 2,
+        label: navItems.length > 1 ? (navItems[navItems.length - 2]).label : '',
+        href: navItems.length > 1 ? (navItems[navItems.length - 2]).href : '',
+        geom: navItems.length > 1 ? (navItems[navItems.length - 2]).geom : ''
+    }));
 module.exports = {
+    drillUpSelector,
     topBarSelector,
     dataContainerSelector
 };

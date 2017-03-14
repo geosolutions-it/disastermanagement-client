@@ -26,6 +26,8 @@ module.exports = {
         new NormalModuleReplacementPlugin(/openlayers$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "openlayers")),
         new NormalModuleReplacementPlugin(/cesium$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "cesium")),
         new NormalModuleReplacementPlugin(/proj4$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "proj4")),
+        new NormalModuleReplacementPlugin(/map\/leaflet\/Feature/, path.join(__dirname, "js", "ms2Override", "LeafletFeature.jsx")),
+        new NormalModuleReplacementPlugin(/reducers\/map/, path.join(__dirname, "js", "ms2Override", "mapreducer.js")),
         new NoEmitOnErrorsPlugin()
     ],
     resolve: {

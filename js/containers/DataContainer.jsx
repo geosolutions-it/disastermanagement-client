@@ -9,7 +9,7 @@ const React = require('react');
 const {connect} = require('react-redux');
 const {BarChart, Bar, XAxis, Cell, Tooltip} = require('recharts');
 const {dataContainerSelector} = require('../selectors/disaster');
-const {getAnalysisData, toggleDim} = require('../actions/disaster');
+const {getAnalysisData, toggleDim, getData} = require('../actions/disaster');
 const Overview = connect(({disaster = {}}) => ({riskItems: disaster.overview || [] }) )(require('../components/Overview'));
 
 const DataContainer = React.createClass({
@@ -105,11 +105,11 @@ const DataContainer = React.createClass({
         });
     },
     renderAnalysisTab() {
-        const {hazardType = {}, analysisType = {}, getData} = this.props;
+        const {hazardType = {}, analysisType = {}, getData: loadData} = this.props;
         return (hazardType.analysisTypes || []).map((type) => {
             const {href, name, title} = type;
             const active = name === analysisType.name;
-            return (<li key={name} className={`text-center ${active ? 'active' : ''}`} onClick={() => getData(href)}>
+            return (<li key={name} className={`text-center ${active ? 'active' : ''}`} onClick={() => loadData(href)}>
                     <span>{title}</span>
                     {active ? (<div className="arrow"/>) : null}
                     </li>);
@@ -133,9 +133,9 @@ const DataContainer = React.createClass({
             </div>);
     },
     render() {
-        const {showHazard, getData} = this.props;
-        return showHazard ? this.renderHazard() : (<Overview className={this.props.className} getData={getData}/>);
+        const {showHazard, getData: loadData} = this.props;
+        return showHazard ? this.renderHazard() : (<Overview className={this.props.className} getData={loadData}/>);
     }
 });
 
-module.exports = connect(dataContainerSelector, {getAnalysis: getAnalysisData, toggleDim})(DataContainer);
+module.exports = connect(dataContainerSelector, {getAnalysis: getAnalysisData, toggleDim, getData})(DataContainer);

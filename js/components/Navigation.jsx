@@ -12,23 +12,27 @@ const Navigation = React.createClass({
         items: React.PropTypes.arrayOf(
         React.PropTypes.shape({
             label: React.PropTypes.string.isRequired,
-            href: React.PropTypes.string
+            href: React.PropTypes.string,
+            geom: React.PropTypes.string
         })),
-        getData: React.PropTypes.func
+        zoom: React.PropTypes.func
     },
     getDefaultProps() {
         return {
             items: [],
-            getData: ()=> {}
+            zoom: ()=> {}
         };
     },
+    onClick(href, geomHref) {
+        this.props.zoom(href, geomHref);
+    },
     renderItem() {
-        const {items, getData} = this.props;
+        const {items} = this.props;
         const length = items.length;
         return items.map((el, idx) => {
             const classes = `btn btn-default ${length - 1 === idx ? 'disabled' : ''}`;
             return (
-            <button key={idx} className={classes} onClick={() => getData(el.href)}>{el.label}</button>);
+            <button key={idx} className={classes} onClick={() => this.onClick(el.href, el.geom)}>{el.label}</button>);
         });
     },
     render() {

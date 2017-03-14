@@ -6,12 +6,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 const axios = require('../../MapStore2/web/client/libs/ajax');
-
+const assign = require('object-assign');
+const {head} = require('lodash');
+const bbox = require('turf-bbox');
+const {changeLayerProperties} = require('../../MapStore2/web/client/actions/layers');
+const {configureMap, configureError} = require('../../MapStore2/web/client/actions/config');
+const {zoomToExtent} = require('../../MapStore2/web/client/actions/map');
 const DATA_LOADING = 'DATA_LOADING';
 const DATA_LOADED = 'DATA_LOADED';
 const DATA_ERROR = 'DATA_ERROR';
 const ANALYSIS_DATA_LOADED = 'ANALYSIS_DATA_LOADED';
 const TOGGLE_DIM = 'TOGGLE_DIM';
+const FEATURES_LOADING = 'FEATURES_LOADING';
+const FEATURES_LOADED = 'FEATURES_LOADED';
+const FEATURES_ERROR = 'FEATURES_ERROR';
 
 function toggleDim() {
     return {
@@ -39,6 +47,44 @@ function dataError(error) {
     return {
         type: DATA_ERROR,
         error
+    };
+}
+function featuresError(error) {
+    return {
+        type: FEATURES_ERROR,
+        error
+    };
+}
+function featuresLoading() {
+    return {
+        type: FEATURES_LOADING
+    };
+}
+function featuresLoaded(data) {
+    return {
+        type: FEATURES_LOADED,
+        data
+    };
+}
+function getFeatures(url) {
+    return (dispatch) => {
+        dispatch(featuresLoading());
+        return axios.get(url).then((response) => {
+            let state = response.data;
+            if (typeof state !== "object") {
+                try {
+                    state = JSON.parse(state);
+                } catch(e) {
+                    dispatch(featuresError(e.message));
+                }
+            }
+            dispatch(changeLayerProperties("adminunits", {features: state.features.map((f, idx) => (assign({}, f, {id: idx}))) || []}));
+            const newExtent = bbox(state.features[0]);
+            dispatch(zoomToExtent(newExtent, "EPSG:4326"));
+            dispatch(featuresLoaded(state));
+        }).catch((e) => {
+            dispatch(featuresError(e));
+        });
     };
 }
 function getData(url) {
@@ -76,7 +122,40 @@ function getAnalysisData(url) {
             dispatch(dataError(e));
         });
     };
-
+}
+function zoom(dataHref, geomHref) {
+    return (dispatch) => {
+        getData(dataHref)(dispatch);
+        getFeatures(geomHref)(dispatch);
+    };
+}
+function zoomTo({layerId, fId} = {}) {
+    return (dispatch, getState) => {
+        const {flat: layers} = (getState()).layers;
+        const layer = head(layers.filter((l) => l.id === layerId));
+        const feature = head(layer.features.filter((f) => f.id === fId));
+        if (feature) {
+            zoom(feature.properties.href, feature.properties.geom)(dispatch);
+        }
+    };
+}
+function loadMapConfig(configName, mapId, featuresUrl) {
+    return (dispatch) => {
+        return axios.get(configName).then((response) => {
+            if (typeof response.data === 'object') {
+                dispatch(configureMap(response.data, mapId));
+                getFeatures(featuresUrl)(dispatch);
+            } else {
+                try {
+                    JSON.parse(response.data);
+                } catch(e) {
+                    dispatch(configureError('Configuration file broken (' + configName + '): ' + e.message));
+                }
+            }
+        }).catch((e) => {
+            dispatch(configureError(e));
+        });
+    };
 }
 module.exports = {
     DATA_LOADING,
@@ -88,6 +167,10 @@ module.exports = {
     dataLoaded,
     dataLoading,
     getData,
+    getFeatures,
     getAnalysisData,
-    toggleDim
+    toggleDim,
+    zoomTo,
+    zoom,
+    loadMapConfig
 };

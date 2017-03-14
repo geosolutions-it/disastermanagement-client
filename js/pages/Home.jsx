@@ -9,18 +9,17 @@ const React = require('react');
 const {connect} = require('react-redux');
 
 const Localized = require('../../MapStore2/web/client/components/I18N/Localized');
-const {getData} = require('../actions/disaster');
+const {getData, zoom} = require('../actions/disaster');
 const {topBarSelector} = require('../selectors/disaster');
-const TopBar = connect(topBarSelector)(require('../components/TopBar'));
+const TopBar = connect(topBarSelector, {zoom, getData})(require('../components/TopBar'));
 const DataContainer = require('../containers/DataContainer');
-// const MapContainer = require('../containers/MapContainer');
+const MapContainer = require('../containers/MapContainer');
 
 const Home = React.createClass({
     propTypes: {
         params: React.PropTypes.object,
         locale: React.PropTypes.string,
         messages: React.PropTypes.object,
-        getData: React.PropTypes.func,
         plugins: React.PropTypes.object
     },
     componentWillMount() {
@@ -30,23 +29,20 @@ const Home = React.createClass({
         console.log(nextProps.params.splat !== this.props.params.splat);
     },
     render() {
-        const {messages, locale} = this.props;
+        const {messages, locale, plugins} = this.props;
         return (
             <Localized messages={messages} locale={locale}>
                <div className="disaster">
-                    <TopBar getData={this.loadData}/>
+                    <TopBar/>
                     <div className="container">
                         <div className="row">
-                            <DataContainer getData={this.loadData}/>
-                            {/*<MapContainer plugins={plugins}/>*/}
+                            <DataContainer/>
+                            {<MapContainer plugins={plugins}/>}
                         </div>
                     </div>
                 </div>
             </Localized>
         );
-    },
-    loadData(href) {
-        this.props.getData(href);
     }
 });
 
@@ -56,4 +52,4 @@ module.exports = connect((state) => {
         locale: state.locale && state.locale.current,
         messages: state.locale && state.locale.messages || {}
     };
-}, {getData})(Home);
+})(Home);
