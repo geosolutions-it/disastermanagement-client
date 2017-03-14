@@ -1,5 +1,5 @@
 const {createSelector} = require('reselect');
-const {last, head} = require('lodash');
+const {last, head, isNull} = require('lodash');
 
 const navItemsSel = ({disaster = {}}) => disaster.navItems || [];
 const riskItemsSel = ({disaster = {}}) => disaster.overview || [];
@@ -7,13 +7,15 @@ const hazardTypeSel = ({disaster = {}}) => disaster.hazardType || {};
 const analysisTypeSel = ({disaster = {}}) => disaster.analysisType || {};
 const riskAnalysisDataSel = ({disaster = {}}) => disaster.riskAnalysisData || {};
 const dimSelector = ({disaster = {}}) => disaster.dim || 0;
-const topBarSelector = createSelector([navItemsSel, riskItemsSel, hazardTypeSel],
-     (navItems, riskItems, hazardType) => ({
+const contextSel = ({disaster = {}}) => disaster.context && !isNull(disaster.context) && disaster.context || '';
+const topBarSelector = createSelector([navItemsSel, riskItemsSel, hazardTypeSel, contextSel],
+     (navItems, riskItems, hazardType, context) => ({
         navItems,
         title: (last(navItems) || {label: ''}).label,
         overviewHref: (last(navItems) || {href: ''}).href,
         riskItems,
-        activeRisk: hazardType.mnemonic || "Overview"
+        activeRisk: hazardType.mnemonic || "Overview",
+        context
     }));
 const dataContainerSelector = createSelector([riskItemsSel, hazardTypeSel, analysisTypeSel, riskAnalysisDataSel, dimSelector],
     ( riskItems, hazardType, analysisType, riskAnalysisData, dim) => ({
@@ -24,12 +26,13 @@ const dataContainerSelector = createSelector([riskItemsSel, hazardTypeSel, analy
         riskAnalysisData,
         dim
     }));
-const drillUpSelector = createSelector([navItemsSel],
-     (navItems) => ({
+const drillUpSelector = createSelector([navItemsSel, contextSel],
+     (navItems, context) => ({
         disabled: navItems.length < 2,
         label: navItems.length > 1 ? (navItems[navItems.length - 2]).label : '',
         href: navItems.length > 1 ? (navItems[navItems.length - 2]).href : '',
-        geom: navItems.length > 1 ? (navItems[navItems.length - 2]).geom : ''
+        geom: navItems.length > 1 ? (navItems[navItems.length - 2]).geom : '',
+        context
     }));
 module.exports = {
     drillUpSelector,

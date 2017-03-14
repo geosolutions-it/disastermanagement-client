@@ -18,7 +18,8 @@ const TopBar = React.createClass({
         zoom: React.PropTypes.func,
         activeRisk: React.PropTypes.string,
         overviewHref: React.PropTypes.string,
-        title: React.PropTypes.string.isRequired
+        title: React.PropTypes.string.isRequired,
+        context: React.PropTypes.string
     },
     getDefaultProps() {
         return {
@@ -29,14 +30,14 @@ const TopBar = React.createClass({
         };
     },
     render() {
-        const {navItems, riskItems, title, overviewHref, activeRisk, getData, zoom} = this.props;
+        const {navItems, context, riskItems, title, overviewHref, activeRisk, getData, zoom} = this.props;
         return (
             <div className="jumbotron">
                 <div className="container">
                     <div className="pull-right">
                         <DownloadBtn/>
                     </div>
-                    <Navigation items={navItems} zoom={zoom}/>
+                    <Navigation items={navItems} zoom={zoom} context={context}/>
                 </div>
                 <div className="container text-center">
                     <h2>
