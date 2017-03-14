@@ -13,6 +13,7 @@ const DrillUpBtn = React.createClass({
         label: React.PropTypes.string,
         href: React.PropTypes.string,
         geom: React.PropTypes.string,
+        context: React.PropTypes.string,
         zoomOut: React.PropTypes.func,
         disabled: React.PropTypes.bool
     },
@@ -26,12 +27,12 @@ const DrillUpBtn = React.createClass({
         return disabled ? null : (
             <button className="btn btn-xs btn-default drillup" onClick={this.onClick}>
                 <i className="btn-xs icon-zoom-out"/>
-                {`Zoom to ${label}`}
+                {`Zoom out to ${label}`}
             </button>);
     },
     onClick() {
-        const {href, zoomOut, geom} = this.props;
-        zoomOut(href, geom);
+        const {href, context, zoomOut, geom} = this.props;
+        zoomOut(`${href}${context}`, geom);
     }
 });
 

@@ -102,6 +102,7 @@ function getData(url) {
             dispatch(dataLoaded(state));
         }).catch((e) => {
             dispatch(dataError(e));
+            return e;
         });
     };
 }
@@ -125,17 +126,22 @@ function getAnalysisData(url) {
 }
 function zoom(dataHref, geomHref) {
     return (dispatch) => {
-        getData(dataHref)(dispatch);
-        getFeatures(geomHref)(dispatch);
+        getData(dataHref)(dispatch).then((e) => {
+            if (!e) {
+                getFeatures(geomHref)(dispatch);
+            }
+        });
     };
 }
 function zoomTo({layerId, fId} = {}) {
     return (dispatch, getState) => {
         const {flat: layers} = (getState()).layers;
+        let {context} = (getState()).disaster;
+        context = context === null ? '' : context;
         const layer = head(layers.filter((l) => l.id === layerId));
         const feature = head(layer.features.filter((f) => f.id === fId));
         if (feature) {
-            zoom(feature.properties.href, feature.properties.geom)(dispatch);
+            zoom(`${feature.properties.href}${context}`, feature.properties.geom)(dispatch);
         }
     };
 }
