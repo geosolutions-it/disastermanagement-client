@@ -1,5 +1,5 @@
 /**
- * Copyright 2015, GeoSolutions Sas.
+ * Copyright 2017, GeoSolutions Sas.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -208,9 +208,8 @@ let Feature = React.createClass({
             });
         }
     },
-    onOver(event) {
+    onOver() {
         this._layer.setStyle({weight: 4});
-        this._layer.openPopup("puppa", event.latLng, {});
     },
     onOut() {
         this._layer.setStyle({weight: 1});
@@ -222,7 +221,6 @@ let Feature = React.createClass({
         this._layer.on('click', this.onClick);
         this._layer.on('mouseover', this.onOver);
         this._layer.on('mouseout', this.onOut);
-        this._layer.on('click', this.onClick);
     },
     removeEvents() {
         this._layer.off('click', this.onClick);

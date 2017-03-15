@@ -5016,6 +5016,9 @@
   border-bottom: 3px solid transparent;
   border-top: 3px solid #8F5408;
 }
+.disaster .leaflet-clickable {
+  cursor: zoom-in;
+}
 .disaster body {
   padding-top: 50px;
   padding-bottom: 20px;
