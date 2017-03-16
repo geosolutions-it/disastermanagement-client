@@ -25,8 +25,9 @@ const disasterSelector = state => ({
 
 
 function getLayerName(disaster) {
-    const dimVal = disaster.riskAnalysis.dimension[disaster.dim.dim2][0];
-    return disaster.riskAnalysis.dimension[disaster.dim.dim2].layers[dimVal];
+    const {data} = disaster.riskAnalysis.riskAnalysisData;
+    const dimVal = data.dimensions[disaster.dim.dim2].values[0];
+    return data.dimensions[disaster.dim.dim2].layers[dimVal];
 }
 
 function getViewParam(disaster) {
