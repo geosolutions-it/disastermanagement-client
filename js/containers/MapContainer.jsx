@@ -13,19 +13,21 @@ const MapViewer = connect(() => ({}), {
     loadMapConfig: loadMapConfig.bind(null, "/static/js/config.json", false, "/risks/geom/loc/AF/")
 })(require('../../MapStore2/web/client/containers/MapViewer'));
 
-const {drillUpSelector} = require('../selectors/disaster');
-const {zoom} = require('../actions/disaster');
+const {drillUpSelector, switchDimSelector} = require('../selectors/disaster');
+const {zoom, toggleDim} = require('../actions/disaster');
 
 const DrillUpBtn = connect(drillUpSelector, {zoomOut: zoom})(require('../components/DrillUpBtn'));
-
+const SwitchDimension = connect(switchDimSelector, {toggleDim})(require('../components/SwitchDimension'));
 const MapContainer = (props) => (
-        <div className="col-sm-5">
-            <div style={{ height: 400, display: 'block'}}>
-                <MapViewer plugins={props.plugins} params={{mapType: "leaflet"}}/>
+        <div className="col-sm-5" style={{padding: 0}}>
+            <div style={{height: 400}}>
+            <MapViewer plugins={props.plugins} params={{mapType: "leaflet"}}/>
             </div>
-            <div style={{ position: 'relative', top: 35, left: -17}}>
+            <div style={{height: 40, width: '100%', marginTop: 10}}>
                 <DrillUpBtn/>
+                <SwitchDimension/>
             </div>
+
         </div>
 );
 
