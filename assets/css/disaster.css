@@ -5016,9 +5016,6 @@
   border-bottom: 3px solid transparent;
   border-top: 3px solid #8F5408;
 }
-.disaster .leaflet-clickable {
-  cursor: zoom-in;
-}
 .disaster body {
   padding-top: 50px;
   padding-bottom: 20px;
@@ -5520,4 +5517,13 @@
   border-right: 60px solid transparent;
   border-top: 10px solid;
   -moz-transform: scale(0.999);
+}
+.disaster .leaflet-clickable {
+  cursor: zoom-in;
+}
+.disaster .switch-dim {
+  cursor: pointer;
+  color: blue;
+  font-size: 18px;
+  float: right;
 }

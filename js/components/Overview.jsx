@@ -30,7 +30,7 @@ const Overview = React.createClass({
             const {title, href, riskAnalysis} = item;
             const noData = !(riskAnalysis > 0);
             return (
-            <div key={idx} className={`${noData ? 'level-no-data' : ''} overview`} onClick={noData ? undefined : () => getData(href)}>
+            <div key={idx} className={`${noData ? 'level-no-data' : ''} overview`} onClick={noData ? undefined : () => getData(href, true)}>
                 <h2 className="page-header">
                     {title}
                     <small>

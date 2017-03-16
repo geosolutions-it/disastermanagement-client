@@ -15,8 +15,7 @@
             "source": "osm",
       "group": "background",
             "visibility": true
-        },
-        {
+        }, {
             "type": "vector",
             "position": 1,
             "queryable": false,

@@ -7,8 +7,6 @@
  */
 const React = require('react');
 const {connect} = require('react-redux');
-
-const Localized = require('../../MapStore2/web/client/components/I18N/Localized');
 const {getData, zoom} = require('../actions/disaster');
 const {topBarSelector} = require('../selectors/disaster');
 const TopBar = connect(topBarSelector, {zoom, getData})(require('../components/TopBar'));
@@ -29,9 +27,8 @@ const Home = React.createClass({
         console.log(nextProps.params.splat !== this.props.params.splat);
     },
     render() {
-        const {messages, locale, plugins} = this.props;
+        const {plugins} = this.props;
         return (
-            <Localized messages={messages} locale={locale}>
                <div className="disaster">
                     <TopBar/>
                     <div className="container">
@@ -41,7 +38,6 @@ const Home = React.createClass({
                         </div>
                     </div>
                 </div>
-            </Localized>
         );
     }
 });

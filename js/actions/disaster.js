@@ -17,9 +17,11 @@ const DATA_LOADED = 'DATA_LOADED';
 const DATA_ERROR = 'DATA_ERROR';
 const ANALYSIS_DATA_LOADED = 'ANALYSIS_DATA_LOADED';
 const TOGGLE_DIM = 'TOGGLE_DIM';
+const SET_DIM_IDX = 'SET_DIM_IDX';
 const FEATURES_LOADING = 'FEATURES_LOADING';
 const FEATURES_LOADED = 'FEATURES_LOADED';
 const FEATURES_ERROR = 'FEATURES_ERROR';
+
 
 function toggleDim() {
     return {
@@ -31,10 +33,11 @@ function dataLoading() {
         type: DATA_LOADING
     };
 }
-function dataLoaded(data) {
+function dataLoaded(data, cleanState) {
     return {
         type: DATA_LOADED,
-        data
+        data,
+        cleanState
     };
 }
 function analysisDataLoaded(data) {
@@ -87,19 +90,12 @@ function getFeatures(url) {
         });
     };
 }
-function getData(url) {
+function getData(url, cleanState = false) {
     return (dispatch) => {
         dispatch(dataLoading());
         return axios.get(url).then((response) => {
             let state = response.data;
-            if (typeof state !== "object") {
-                try {
-                    state = JSON.parse(state);
-                } catch(e) {
-                    dispatch(dataError(e.message));
-                }
-            }
-            dispatch(dataLoaded(state));
+            dispatch(dataLoaded(state, cleanState));
         }).catch((e) => {
             dispatch(dataError(e));
             return e;
@@ -125,9 +121,14 @@ function getAnalysisData(url) {
     };
 }
 function zoom(dataHref, geomHref) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const {riskAnalysis, context} = (getState()).disaster;
         getData(dataHref)(dispatch).then((e) => {
             if (!e) {
+                if (riskAnalysis) {
+                    const analContext = riskAnalysis.context.replace(context, '');
+                    getAnalysisData(`${dataHref}${analContext}`)(dispatch);
+                }
                 getFeatures(geomHref)(dispatch);
             }
         });
@@ -141,7 +142,7 @@ function zoomTo({layerId, fId} = {}) {
         const layer = head(layers.filter((l) => l.id === layerId));
         const feature = head(layer.features.filter((f) => f.id === fId));
         if (feature) {
-            zoom(`${feature.properties.href}${context}`, feature.properties.geom)(dispatch);
+            zoom(`${feature.properties.href}${context}`, feature.properties.geom)(dispatch, getState);
         }
     };
 }
@@ -163,12 +164,19 @@ function loadMapConfig(configName, mapId, featuresUrl) {
         });
     };
 }
+function setDimIdx(idx) {
+    return {
+        type: SET_DIM_IDX,
+        idx
+    };
+}
 module.exports = {
     DATA_LOADING,
     DATA_LOADED,
     DATA_ERROR,
     ANALYSIS_DATA_LOADED,
     TOGGLE_DIM,
+    SET_DIM_IDX,
     dataError,
     dataLoaded,
     dataLoading,
@@ -178,5 +186,6 @@ module.exports = {
     toggleDim,
     zoomTo,
     zoom,
-    loadMapConfig
+    loadMapConfig,
+    setDimIdx
 };

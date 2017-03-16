@@ -7,22 +7,24 @@
  */
 const React = require('react');
 const {connect} = require('react-redux');
-const {BarChart, Bar, XAxis, Cell, Tooltip} = require('recharts');
 const {dataContainerSelector} = require('../selectors/disaster');
-const {getAnalysisData, toggleDim, getData} = require('../actions/disaster');
+
+const {getAnalysisData, getData, setDimIdx} = require('../actions/disaster');
+const Chart = require('../components/Chart');
 const Overview = connect(({disaster = {}}) => ({riskItems: disaster.overview || [] }) )(require('../components/Overview'));
 
 const DataContainer = React.createClass({
     propTypes: {
         getData: React.PropTypes.func,
         getAnalysis: React.PropTypes.func,
-        toggleDim: React.PropTypes.func,
+        setDimIdx: React.PropTypes.func,
         showHazard: React.PropTypes.bool,
         className: React.PropTypes.string,
         hazardTitle: React.PropTypes.string,
         analysisType: React.PropTypes.object,
         riskAnalysisData: React.PropTypes.object,
-        dim: React.PropTypes.number,
+        dim: React.PropTypes.object,
+        dimIdx: React.PropTypes.number,
         hazardType: React.PropTypes.shape({
             mnemonic: React.PropTypes.string,
             description: React.PropTypes.string,
@@ -39,7 +41,7 @@ const DataContainer = React.createClass({
             getData: () => {},
             getAnalysis: () => {},
             className: "col-sm-7",
-            dim: 0
+            dimVal: 0
         };
     },
     getRandomColor() {
@@ -56,37 +58,23 @@ const DataContainer = React.createClass({
         return data.filter((d) => d[nameIdx] === val ).map((v) => {return {"name": v[dim], "value": parseInt(v[2], 10)}; });
     },
     renderAnalysisData() {
-        const {dim, toggleDim: tDim} = this.props;
-        const secDim = dim === 0 ? 1 : 0;
+        const {dim, dimIdx, setDimIdx: sIdx} = this.props;
         const {hazardSet, data} = this.props.riskAnalysisData;
-        return (<div><h4>{hazardSet.title}</h4><br/>
-                    {hazardSet.purpose}
-                    <br/>
-                    <h4 style={{color: 'blue', cursor: 'pointer'}} onClick={tDim}>{`Switch to ${data.dimensions[secDim].name}`}</h4>
-                    <ul>
-                    {data.dimensions[dim].values.map((val) => {
-                        const chartData = this.getChartData(data.values, val);
-                        if (chartData.length === 0 ) {
-                            return undefined;
-                        }
-                        return (<li key={val} style={{marginBottom: 20}}>
-                            {`${data.dimensions[dim].name} ${val}`}
-                            <BarChart width={500} height={200} data={chartData}
-                                        margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                                <XAxis dataKey="name"/>
-                                <Tooltip/>
-                                <Bar dataKey="value">
-                                {
-                                    chartData.map((entry, index) => {
-                                        return (
-                                            <Cell cursor="pointer" fill={this.getRandomColor()} key={`cell-${index}`}/>);
-                                    })
-                                }
-                                </Bar>
-                            </BarChart>
-                            </li>
-                            );
-                    }).filter((el) => el)}
+        return (<div>
+            <h4>{hazardSet.title}</h4><br/>
+                <p>{hazardSet.purpose}</p>
+                <br/>
+                <ul>
+                    {data.dimensions[dim.dim1].values.map((val, idx) => {
+                        return idx === dimIdx ? (
+                            <li key={val} style={{marginBottom: 30}}>
+                                <span>{`${data.dimensions[dim.dim1].name} ${val}`}</span>
+                                <Chart dimension={data.dimensions} values={data.values} val={val} dim={dim}/>
+                            </li>) : (
+                            <li key={val} style={{marginBottom: 20}}>
+                                <span style={{color: 'blue', cursor: 'pointer'}} onClick={() => sIdx(idx)}>{`${data.dimensions[dim.dim1].name} ${val}`}</span>
+                            </li>);
+                    })}
                     </ul>
                     </div>);
     },
@@ -109,7 +97,7 @@ const DataContainer = React.createClass({
         return (hazardType.analysisTypes || []).map((type) => {
             const {href, name, title} = type;
             const active = name === analysisType.name;
-            return (<li key={name} className={`text-center ${active ? 'active' : ''}`} onClick={() => loadData(href)}>
+            return (<li key={name} className={`text-center ${active ? 'active' : ''}`} onClick={() => loadData(href, true)}>
                     <span>{title}</span>
                     {active ? (<div className="arrow"/>) : null}
                     </li>);
@@ -138,4 +126,4 @@ const DataContainer = React.createClass({
     }
 });
 
-module.exports = connect(dataContainerSelector, {getAnalysis: getAnalysisData, toggleDim, getData})(DataContainer);
+module.exports = connect(dataContainerSelector, {getAnalysis: getAnalysisData, getData, setDimIdx})(DataContainer);
